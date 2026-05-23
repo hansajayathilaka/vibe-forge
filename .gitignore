@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+dist/
+frontend/dist/
+
+# TypeScript
+*.tsbuildinfo
+
+# Environment (keep .env.development, ignore secrets)
+.env
+.env.local
+.env.production
+
+# PocketBase binary and runtime data
+backend/pocketbase
+backend/pb_data/
+
+# Editor
+.DS_Store
+.vscode/settings.json
+*.swp
