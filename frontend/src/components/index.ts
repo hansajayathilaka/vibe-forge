@@ -1,26 +1,20 @@
-// Stub component exports — implemented in TASK-06
-import type { ComponentRenderProps } from '@json-render/react'
-
-function stub(_: ComponentRenderProps): null {
-  return null
-}
-
-export const Column = stub
-export const Row = stub
-export const Grid = stub
-export const Card = stub
-export const Text = stub
-export const Button = stub
-export const Link = stub
-export const Image = stub
-export const Divider = stub
-export const Badge = stub
-export const Spacer = stub
-export const DataTable = stub
-export const Form = stub
-export const TextField = stub
-export const TextArea = stub
-export const Select = stub
-export const Checkbox = stub
-export const Modal = stub
-export const Tabs = stub
+export { Column } from './Column.js'
+export { Row } from './Row.js'
+export { Grid } from './Grid.js'
+export { Card } from './Card.js'
+export { Text } from './Text.js'
+export { Button } from './Button.js'
+export { Link } from './Link.js'
+export { Image } from './Image.js'
+export { Divider } from './Divider.js'
+export { Badge } from './Badge.js'
+export { Spacer } from './Spacer.js'
+export { DataTable } from './DataTable.js'
+export { DataTableRow } from './DataTableRow.js'
+export { Form } from './Form.js'
+export { TextField } from './TextField.js'
+export { TextArea } from './TextArea.js'
+export { Select } from './Select.js'
+export { Checkbox } from './Checkbox.js'
+export { Modal } from './Modal.js'
+export { Tabs } from './Tabs.js'

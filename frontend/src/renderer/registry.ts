@@ -2,7 +2,7 @@ import type { ComponentRegistry } from '@json-render/react'
 import type { DataCall } from '@shared/types/index.js'
 import {
   Column, Row, Grid, Card, Text, Button, Link, Image,
-  Divider, Badge, Spacer, DataTable, Form, TextField,
+  Divider, Badge, Spacer, DataTable, DataTableRow, Form, TextField,
   TextArea, Select, Checkbox, Modal, Tabs,
 } from '../components/index.js'
 import { triggerDataCall, type StateStore } from './triggerDataCall.js'
@@ -11,7 +11,7 @@ import { interpolateTemplate } from './interpolateTemplate.js'
 
 export const componentRegistry: ComponentRegistry = {
   Column, Row, Grid, Card, Text, Button, Link, Image,
-  Divider, Badge, Spacer, DataTable, Form, TextField,
+  Divider, Badge, Spacer, DataTable, DataTableRow, Form, TextField,
   TextArea, Select, Checkbox, Modal, Tabs,
 }
 
