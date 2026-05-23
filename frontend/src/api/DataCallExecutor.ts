@@ -1,9 +1,16 @@
 import type { DataCall } from '@shared/types/index.js'
+import type { ApiClient } from './ApiClient.js'
 import { pbClient } from './PocketBaseClient.js'
 
 export interface StateStore {
   get: (path: string) => unknown
   set: (path: string, value: unknown) => void
+}
+
+let _client: ApiClient = pbClient
+
+export function setApiClient(client: ApiClient): void {
+  _client = client
 }
 
 export class DataCallExecutor {
@@ -22,7 +29,7 @@ export class DataCallExecutor {
 
   private static async execute(call: DataCall, store: StateStore): Promise<unknown> {
     if (call.action === 'list') {
-      return pbClient.list(call.collection, {
+      return _client.list(call.collection, {
         filter: call.filter !== undefined ? applyFilterSubstitution(call.filter, store) : undefined,
         sort: call.sort,
         expand: call.expand,
@@ -31,21 +38,21 @@ export class DataCallExecutor {
 
     if (call.action === 'get') {
       const id = resolveId(call.id, store)
-      return pbClient.get(call.collection, id, { expand: call.expand })
+      return _client.get(call.collection, id, { expand: call.expand })
     }
 
     if (call.action === 'create') {
-      return pbClient.create(call.collection, resolveBody(call.body ?? {}, store))
+      return _client.create(call.collection, resolveBody(call.body ?? {}, store))
     }
 
     if (call.action === 'update') {
       const id = resolveId(call.id, store)
-      return pbClient.update(call.collection, id, resolveBody(call.body ?? {}, store))
+      return _client.update(call.collection, id, resolveBody(call.body ?? {}, store))
     }
 
     if (call.action === 'delete') {
       const id = resolveId(call.id, store)
-      await pbClient.delete(call.collection, id)
+      await _client.delete(call.collection, id)
       return null
     }
 
