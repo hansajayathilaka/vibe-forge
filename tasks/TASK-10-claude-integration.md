@@ -1,0 +1,116 @@
+# TASK-10 — Claude Code Integration
+
+| Field | Value |
+|---|---|
+| **Phase** | Phase 1 |
+| **Status** | `pending` |
+| **Blocked by** | TASK-02, TASK-08 |
+| **Blocks** | TASK-11 |
+
+---
+
+## Description
+
+Make Claude Code the effective vibe coding IDE for this platform. A developer opens the template repo in Claude Code, describes what they want in plain language, and gets correct, working artefacts — screen JSON, behaviour files, PocketBase migrations, workflow hooks.
+
+### `CLAUDE.md` (`.claude/CLAUDE.md`)
+
+The project context file Claude Code reads on startup. Must cover:
+
+- **One-paragraph summary** of what this platform is
+- **Three layers** of the repo:
+  - `app/` — what you edit (screens, behaviours, hooks)
+  - `frontend/` — the runtime (rarely touched)
+  - `backend/` — PocketBase + migrations
+- **How screens work**: JSON file in `app/screens/`, registered in `_index.json`, served by PocketBase at runtime, rendered by `@json-render/react`
+- **How behaviour files work**: ES module in `app/behaviours/`, loaded on demand by the `runBehaviour` action, receives `{ model, navigate }`
+- **How to add a collection**: Go migration in `backend/pb_migrations/`
+- **How to add a workflow hook**: `.pb.js` file in `app/hooks/`, run `pnpm setup`, restart PocketBase
+- **Pointers** to all spec files in `.claude/prompts/`
+- **Quick-start recipes** (copy-paste triggers for Claude):
+  - "Add a new screen for..."
+  - "Add a PocketBase collection for..."
+  - "Add a behaviour that..."
+  - "Add a workflow hook that..."
+
+### Slash commands
+
+#### `/gen-screen` (`.claude/commands/gen-screen.md`)
+
+System prompt is built from `catalog.prompt()` output (from `scripts/gen-catalog-prompt.ts`) combined with the screen wrapper documentation from `.claude/prompts/ui-json-spec.md`.
+
+Given a natural-language screen description, generates:
+1. `app/screens/<name>.json` — complete screen file with `$schema`, `data` calls, and `spec`
+2. The `_index.json` entry to append
+3. A list of any behaviour files referenced so the user knows to run `/gen-behaviour` next
+
+#### `/gen-behaviour` (`.claude/commands/gen-behaviour.md`)
+
+System prompt reads `.claude/prompts/behaviour-file-spec.md`.
+
+Given a description of an interaction, generates `app/behaviours/<name>.js` — a valid ES module with named exports following the behaviour context contract.
+
+#### `/gen-schema` (`.claude/commands/gen-schema.md`)
+
+System prompt reads `.claude/prompts/pocketbase-patterns.md`.
+
+Given an entity description (e.g. "a product with name, price, stock count, and category"), generates:
+- `backend/pb_migrations/<timestamp>_<name>.go` — Go migration creating the collection with correct field types, indexes, and API rules
+
+#### `/gen-workflow` (`.claude/commands/gen-workflow.md`)
+
+System prompt reads `.claude/prompts/pocketbase-patterns.md`.
+
+Given a workflow description (e.g. "when a post status changes to pending_review, log it to audit_log"), generates:
+- `app/hooks/<name>.pb.js` — PocketBase hook file using the JS hooks API
+- Reminds the user to run `pnpm setup` and restart PocketBase for the hook to take effect
+
+### Prompt reference files
+
+#### `.claude/prompts/pocketbase-patterns.md`
+
+Must cover:
+- Go migration file structure — package, imports, `func init()`, `migrate()` function signature
+- PocketBase field type reference — Text, Number, Bool, Email, URL, Date, Select, JSON, File, Relation
+- How to set API rules (create/read/update/delete rule strings)
+- JS hook structure — `onRecordCreate`, `onRecordUpdate`, `onRecordDelete`, `onRecordBeforeCreate`, etc.
+- Available JS hook APIs — `$app`, `Record`, `$app.findCollectionByNameOrId`, `$app.save`, `$app.delete`
+- Common patterns:
+  - Status machine transition guard
+  - Creating a related record on save (audit log)
+  - Sending email via SMTP
+  - Computed field population before save
+
+#### `scripts/gen-catalog-prompt.ts`
+
+A small script that imports the catalog and writes `catalog.prompt()` to `.claude/prompts/catalog-prompt.md`. Run this whenever the catalog changes to keep the `/gen-screen` system prompt in sync.
+
+```typescript
+import { catalog } from '../frontend/src/catalog'
+import { writeFileSync } from 'fs'
+
+const prompt = catalog.prompt({
+  customRules: [
+    'Always include a $schema reference at the top of the screen file.',
+    'Always define data calls in the screen `data` array, not inline in elements.',
+    'Use Column as the root element for all screens.',
+    'Use descriptive element IDs like "post-title-field" not "field1".',
+  ],
+})
+
+writeFileSync('.claude/prompts/catalog-prompt.md', prompt)
+console.log('Catalog prompt written to .claude/prompts/catalog-prompt.md')
+```
+
+---
+
+## Deliverables
+
+- [ ] `.claude/CLAUDE.md`
+- [ ] `.claude/commands/gen-screen.md`
+- [ ] `.claude/commands/gen-behaviour.md`
+- [ ] `.claude/commands/gen-schema.md`
+- [ ] `.claude/commands/gen-workflow.md`
+- [ ] `.claude/prompts/pocketbase-patterns.md`
+- [ ] `scripts/gen-catalog-prompt.ts`
+- [ ] `.claude/prompts/catalog-prompt.md` (generated by running the script)
