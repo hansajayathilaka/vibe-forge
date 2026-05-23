@@ -7,7 +7,7 @@ This file tracks the build status of all Phase 1 tasks. The `/next-task` slash c
 | Task | Title | Status | Blocked By |
 |------|-------|--------|------------|
 | TASK-01 | Repo & Monorepo Setup | `done` | — |
-| TASK-02 | Catalog Definition & Screen Schema | `pending` | TASK-01 |
+| TASK-02 | Catalog Definition & Screen Schema | `done` | TASK-01 |
 | TASK-03 | PocketBase Backend Setup | `pending` | TASK-01 |
 | TASK-04 | Screen Config Fetcher | `pending` | TASK-01 |
 | TASK-05 | ScreenRenderer | `pending` | TASK-02, TASK-04 |

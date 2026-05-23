@@ -1,0 +1,176 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ui-screen.schema.json",
+  "title": "VibeForge UI Screen",
+  "description": "Defines a UI screen in a VibeForge application. Screen files live in app/screens/<id>.json.",
+  "type": "object",
+  "required": ["id", "title", "route", "spec"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference — enables editor autocomplete"
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique screen identifier matching the filename without .json (e.g. posts-list)"
+    },
+    "title": {
+      "type": "string",
+      "description": "Page <title> shown in the browser tab"
+    },
+    "route": {
+      "type": "string",
+      "description": "React Router path. Use :paramName for URL params (e.g. /posts/:id)",
+      "pattern": "^/"
+    },
+    "data": {
+      "type": "array",
+      "description": "PocketBase data calls this screen runs",
+      "items": { "$ref": "#/definitions/DataCall" }
+    },
+    "spec": {
+      "type": "object",
+      "description": "json-render spec — the renderer reads this to produce the UI",
+      "required": ["root", "elements"],
+      "additionalProperties": false,
+      "properties": {
+        "root": {
+          "type": "string",
+          "description": "ID of the root element in the elements map"
+        },
+        "elements": {
+          "type": "object",
+          "description": "Flat map of all elements keyed by element ID",
+          "additionalProperties": { "$ref": "#/definitions/UiElement" }
+        },
+        "state": {
+          "type": "object",
+          "description": "Initial state values merged into the store before rendering"
+        }
+      }
+    }
+  },
+  "definitions": {
+    "DataCall": {
+      "type": "object",
+      "required": ["name", "action", "collection", "trigger"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Result namespace: /data/<name>/items, /data/<name>/_loading, etc."
+        },
+        "action": {
+          "type": "string",
+          "enum": ["list", "get", "create", "update", "delete"],
+          "description": "PocketBase operation"
+        },
+        "collection": {
+          "type": "string",
+          "description": "PocketBase collection name"
+        },
+        "filter": {
+          "type": "string",
+          "description": "PocketBase filter expression. Use {/path} to read state at call time."
+        },
+        "sort": {
+          "type": "string",
+          "description": "PocketBase sort expression (e.g. -created for descending)"
+        },
+        "expand": {
+          "type": "string",
+          "description": "Comma-separated relations to expand (e.g. author,category)"
+        },
+        "id": {
+          "description": "Record ID for get/update/delete. Use {\"$route\": \"paramName\"} to pull from URL.",
+          "oneOf": [
+            { "type": "string" },
+            {
+              "type": "object",
+              "required": ["$route"],
+              "properties": { "$route": { "type": "string" } },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "body": {
+          "type": "object",
+          "description": "For create/update. Values starting with / are treated as state paths; others are literals.",
+          "additionalProperties": { "type": "string" }
+        },
+        "trigger": {
+          "type": "string",
+          "enum": ["load", "manual"],
+          "description": "load fires on screen mount; manual fires only via a callData action"
+        }
+      }
+    },
+    "UiElement": {
+      "type": "object",
+      "required": ["type", "props"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Component name from the catalog (e.g. Column, TextField)"
+        },
+        "props": {
+          "type": "object",
+          "description": "Props passed to the component. Values can be literals or binding expressions."
+        },
+        "children": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Ordered list of child element IDs"
+        },
+        "actions": {
+          "type": "object",
+          "description": "Event handlers keyed by event name (click, change, submit, rowClick, etc.)",
+          "additionalProperties": {
+            "oneOf": [
+              { "$ref": "#/definitions/UiAction" },
+              {
+                "type": "array",
+                "items": { "$ref": "#/definitions/UiAction" }
+              }
+            ]
+          }
+        },
+        "repeat": {
+          "type": "object",
+          "required": ["statePath", "key"],
+          "additionalProperties": false,
+          "properties": {
+            "statePath": {
+              "type": "string",
+              "description": "State path to the array to repeat over (e.g. /data/posts/items)"
+            },
+            "key": {
+              "type": "string",
+              "description": "Field on each item used as the React key (e.g. id)"
+            }
+          }
+        },
+        "showIf": {
+          "description": "Condition controlling element visibility. Use a $state expression or a boolean."
+        }
+      }
+    },
+    "UiAction": {
+      "type": "object",
+      "required": ["action", "params"],
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "Action name registered in the catalog (callData, navigate, runBehaviour)"
+        },
+        "params": {
+          "type": "object",
+          "description": "Parameters for the action"
+        }
+      }
+    }
+  }
+}
