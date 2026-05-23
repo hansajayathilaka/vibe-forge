@@ -11,7 +11,7 @@ This file tracks the build status of all Phase 1 tasks. The `/next-task` slash c
 | TASK-03 | PocketBase Backend Setup | `done` | TASK-01 |
 | TASK-04 | Screen Config Fetcher | `done` | TASK-01 |
 | TASK-05 | ScreenRenderer | `done` | TASK-02, TASK-04 |
-| TASK-06 | Base Component Library | `pending` | TASK-05 |
+| TASK-06 | Base Component Library | `done` | TASK-05 |
 | TASK-07 | API Client & Data Binding Layer | `pending` | TASK-03 |
 | TASK-08 | Behaviour File Loader | `pending` | TASK-01 |
 | TASK-09 | Router | `pending` | TASK-05 |
