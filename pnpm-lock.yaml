@@ -41,6 +41,9 @@ importers:
       '@json-render/react':
         specifier: ^0.1.0
         version: 0.1.0(react@19.2.6)(zod@3.25.76)
+      pocketbase:
+        specifier: ^0.21.0
+        version: 0.21.5
       react:
         specifier: ^19.0.0
         version: 19.2.6
@@ -1145,6 +1148,9 @@ packages:
   pirates@4.0.7:
     resolution: {integrity: sha512-TfySrs/5nm8fQJDcBDuUng3VOUKsd7S+zqvbOTiGXHfxX4wK31ard+hoNuvkicM/2YFzlpDgABOevKSsB4G/FA==}
     engines: {node: '>= 6'}
+
+  pocketbase@0.21.5:
+    resolution: {integrity: sha512-bnI/uinnQps+ElSlzxkc4yvwuSFfKcoszDtXH/4QT2FhGq2mJVUvDlxn+rjRXVntUjPfmMG5LEPZ1eGqV6ssog==}
 
   postcss-import@15.1.0:
     resolution: {integrity: sha512-hpr+J05B2FVYUAXHeK1YyI267J/dDDhMU6B6civm8hSY1jYJnBXxzKDKDswzJmtLHryrjhnDjqqp/49t8FALew==}
@@ -2467,6 +2473,8 @@ snapshots:
   pify@2.3.0: {}
 
   pirates@4.0.7: {}
+
+  pocketbase@0.21.5: {}
 
   postcss-import@15.1.0(postcss@8.5.15):
     dependencies:
