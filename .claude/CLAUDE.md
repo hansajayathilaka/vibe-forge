@@ -1,62 +1,70 @@
 # VibeForge — Platform Developer Context
 
-VibeForge is a low-code platform template. This repository is the platform itself — when Phase 1 is complete it becomes a GitHub template that "vibe coders" fork to build their own data-driven applications using Claude Code as the IDE.
+VibeForge is a low-code platform template. This repository is the platform itself. When Phase 1 is complete it becomes a GitHub template that "vibe coders" fork to build their own data-driven applications using Claude Code as the IDE.
 
 ## You are building the platform
 
-You are NOT a vibe coder building an app on top of VibeForge. You are building the platform infrastructure. The deliverables are defined as 12 tasks in `docs/tasks/PROGRESS.md`.
+You are NOT a vibe coder building an app on top of VibeForge. You are building the platform infrastructure. The deliverables are 12 tasks tracked in `docs/tasks/PROGRESS.md`.
 
-**To build Phase 1:** run `/next-task` in Claude Code. It picks up the next unblocked task, reads the spec, implements all deliverables, updates the progress tracker, and commits.
+**To build Phase 1:** run `/next-task`. It picks up the next unblocked task, reads the spec, implements all deliverables, updates the progress tracker, and commits.
 
-## Repo Layer Separation (critical)
+## Current state
+
+See `docs/tasks/PROGRESS.md` for live status. As of the last update: TASK-01 through TASK-10 are done; TASK-11 (Example Application) and TASK-12 (Template Finalisation) are pending.
+
+Essential reading before changing anything:
+- `docs/IDEA.md` — full platform vision and architecture decisions
+- `docs/PHASE1.md` — complete technical spec, component catalog, DataCall format
+- `docs/tasks/PROGRESS.md` — task status and dependency graph
+
+## Repo layer separation (critical)
 
 | Directory | What it is | Who edits it |
 |-----------|-----------|--------------|
-| `app/` | The vibe coder's application files (screens, behaviours, hooks) | Vibe coders (future template users) |
-| `frontend/` | The platform runtime — React + json-render renderer | Platform devs (you, now) |
-| `backend/` | PocketBase binary, Go migrations, JS hooks | Both |
-| `.claude/` | Claude Code context, slash commands, and prompt skill files | Platform devs (you, now) |
+| `app/` | Vibe coder's application files (screens, behaviours, hooks) | Vibe coders (template users) |
+| `frontend/` | Platform runtime — React + json-render renderer | Platform devs |
+| `backend/` | PocketBase binary, Go migrations, JS hooks | Platform devs + vibe coders |
+| `app/.claude/` | Vibe coder's Claude Code commands and prompts | Platform devs |
+| `.claude/` | Platform dev Claude Code commands and prompts | Platform devs |
 | `shared/` | TypeScript types and JSON schemas shared across layers | Platform devs |
 | `scripts/` | Setup and code-generation scripts | Platform devs |
-| `docs/` | Architecture, task specs, and this progress tracker | Platform devs |
+| `docs/` | Architecture, task specs, and progress tracker | Platform devs |
 
-`frontend/` and `app/` must stay cleanly separated. The runtime fetches screens and behaviours from PocketBase's static file serving (`--publicDir ../app`) — the frontend never imports from `app/` directly.
+`frontend/` and `app/` must stay cleanly separated. The runtime fetches screens and behaviours from PocketBase static file serving (`--publicDir ../app`) — the frontend never imports from `app/` directly.
 
-## Current State
-
-Phase 1 — Scaffolding & Runtime Foundation: **all tasks pending**.
-
-See `docs/tasks/PROGRESS.md` for the full task list and dependency graph.
-See `docs/PHASE1.md` for the complete technical specification.
-See `docs/IDEA.md` for the full platform vision and architecture.
-
-## Phase 1 Architecture in Brief
+## Architecture
 
 ```
 pnpm dev
   ├── Vite dev server  → http://localhost:5173  (React frontend)
   └── PocketBase       → http://localhost:8090
         ├── /api/collections/*   (REST data API)
-        └── /screens/*.json      (UI Definition JSON, static)
-        └── /behaviours/*.js     (JS Behaviour files, static)
+        ├── /screens/*.json      (UI Definition JSON, served from app/)
+        └── /behaviours/*.js     (JS Behaviour files, served from app/)
 ```
 
-The frontend reads `VITE_PB_URL` (default: `http://localhost:8090`) and fetches everything from that single origin — config files and data API alike.
+`VITE_PB_URL` (default `http://localhost:8090`) is the only environment variable the frontend needs.
 
-## Skill Reference Files
+## Prompt skill files
 
-These files in `.claude/prompts/` are used by the `/next-task` command and by generation commands added in TASK-10:
+These files are read by `/next-task` when implementing tasks:
 
-- `ui-json-spec.md` — Screen JSON format, DataCall spec, json-render state binding expressions, full annotated example
-- `pocketbase-patterns.md` — Go migration structure, field types, API rules, JS hook patterns
-- `behaviour-file-spec.md` — Behaviour file ES module contract, BehaviourContext interface, wiring in screen specs
+| File | Used when the task involves |
+|------|-----------------------------|
+| `.claude/prompts/ui-json-spec.md` | Screen JSON, renderer, json-render, UI components |
+| `.claude/prompts/pocketbase-patterns.md` | PocketBase migrations or JS hooks |
+| `.claude/prompts/behaviour-file-spec.md` | Behaviour files |
 
-## Key Design Decisions
+The same spec files are also copied to `app/.claude/prompts/` for vibe coder use.
+
+## Key design decisions
 
 1. **PocketBase as static file server** — `--publicDir ../app` makes `app/` accessible over HTTP. When Phase 2 adds DB-backed config, PocketBase custom routes intercept `/screens/*` and `/behaviours/*` transparently — frontend code doesn't change.
 
-2. **json-render for rendering** — `@json-render/core` + `@json-render/react` (Vercel Labs) handles the renderer, state store, data binding, repeat, visibility, and `catalog.prompt()` generation. We build components and wire actions; the library does the rest.
+2. **json-render for rendering** — `@json-render/core` + `@json-render/react` handles the renderer, state store, data binding, repeat, visibility, and component registration. We build components and wire actions; the library does the rest.
 
 3. **One env var** — `VITE_PB_URL` is the only runtime configuration the frontend needs.
 
 4. **Behaviour files are plain ES modules** — loaded via dynamic `import()` from PocketBase. No sandbox in Phase 1 (explicit non-goal). Sandboxing is deferred to Phase 2.
+
+5. **Vibe coder works in `app/`** — Claude Code is opened from within `app/`. All vibe coder commands, prompts, and context live in `app/.claude/`. The `app/` directory is what gets customised when someone forks the template.

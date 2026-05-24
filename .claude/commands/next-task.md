@@ -57,7 +57,7 @@ Open `docs/tasks/PROGRESS.md` and change the task's status from `` `pending` `` 
 Create a git commit with:
 - All new and modified files staged
 - Message format: `feat(TASK-NN): <task title from PROGRESS.md>`
-- Push to branch `claude/phase-1-infrastructure-oXTWu`
+- Push to the current branch: `git push -u origin $(git branch --show-current)`
 
 ## Step 8 — Report
 
