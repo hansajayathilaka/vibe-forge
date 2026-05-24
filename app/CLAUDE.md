@@ -48,6 +48,37 @@ Go migrations in `backend/pb_migrations/` define your PocketBase collections. Po
 
 Run `/gen-schema` to generate a migration from an entity description like "a product with name, price, stock count, and category".
 
+## How to Style Your App
+
+### Global brand theme
+
+Edit `app/styles/theme.css`. Uncomment and change the CSS variables that correspond to your brand:
+
+```css
+:root {
+  --vf-color-primary: #7c3aed;        /* purple primary */
+  --vf-color-primary-hover: #6d28d9;
+  --vf-color-surface: #1e1e2e;        /* dark surface */
+  --vf-radius: 0.75rem;               /* rounder corners */
+}
+```
+
+Changes take effect on the next page load — no rebuild required. The platform defaults (blue, white, 0.5rem radius) apply for any variable you leave commented out.
+
+Run `/gen-theme` to have Claude choose hex values from a plain-language brand description.
+
+### Per-element custom classes
+
+Every element in a screen JSON accepts an optional `className` prop. It appends Tailwind utility classes to the component's root DOM element without replacing its base styles:
+
+```json
+{
+  "id": "save-btn",
+  "type": "Button",
+  "props": { "label": "Save", "variant": "primary", "className": "w-full mt-4" }
+}
+```
+
 ## How to Add a Workflow Hook
 
 Create a `.pb.js` file in `app/hooks/<name>.pb.js`, then run `pnpm setup` from the repo root and restart PocketBase. Hooks fire on PocketBase record events.
@@ -62,6 +93,7 @@ Run `/gen-workflow` to generate a hook from a description like "when a post stat
 | `/gen-behaviour` | Generate a behaviour JS file from an interaction description |
 | `/gen-schema` | Generate a PocketBase Go migration from an entity description |
 | `/gen-workflow` | Generate a PocketBase JS hook from a workflow description |
+| `/gen-theme` | Set brand colours and radius from a plain-language description |
 
 ## Spec Reference Files
 
@@ -85,3 +117,6 @@ These are automatically read by the slash commands above:
 
 **New workflow hook:**
 > Add a workflow hook that [trigger event and what the hook should do]. Use /gen-workflow.
+
+**Brand theme:**
+> Apply a [colour/style description, e.g. "deep purple with rounded corners and dark card surfaces"] theme. Use /gen-theme.

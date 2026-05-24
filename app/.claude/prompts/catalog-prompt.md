@@ -8,6 +8,7 @@ Auto-generated reference for all components and actions available in screen JSON
 - Always define data calls in the screen `data` array, not inline in elements.
 - Use Column as the root element for all screens.
 - Use descriptive element IDs like "post-title-field" not "field1".
+- Every component accepts an optional `className` prop (string) to append Tailwind utility classes to its root element.
 
 ---
 
