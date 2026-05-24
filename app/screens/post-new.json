@@ -1,0 +1,114 @@
+{
+  "$schema": "../../shared/schemas/ui-screen.schema.json",
+  "id": "post-new",
+  "title": "New Post",
+  "route": "/admin/posts/new",
+  "data": [
+    {
+      "name": "categories",
+      "action": "list",
+      "collection": "categories",
+      "sort": "name",
+      "trigger": "load"
+    },
+    {
+      "name": "createPost",
+      "action": "create",
+      "collection": "posts",
+      "body": {
+        "title": "/form/title",
+        "slug": "/form/slug",
+        "body": "/form/body",
+        "category": "/form/category",
+        "status": "draft"
+      },
+      "trigger": "manual"
+    }
+  ],
+  "spec": {
+    "root": "page",
+    "state": {
+      "form": { "title": "", "slug": "", "body": "", "category": "" }
+    },
+    "elements": {
+      "page": {
+        "type": "Column",
+        "props": { "gap": 6, "padding": 8 },
+        "children": ["back-link", "page-title", "post-form"]
+      },
+      "back-link": {
+        "type": "Link",
+        "props": { "label": "← Back to posts", "to": "/admin/posts" },
+        "children": []
+      },
+      "page-title": {
+        "type": "Text",
+        "props": { "text": "New Post", "variant": "h1" },
+        "children": []
+      },
+      "post-form": {
+        "type": "Form",
+        "props": {},
+        "children": ["title-field", "slug-field", "category-field", "body-field", "save-btn"],
+        "actions": {
+          "submit": [
+            { "action": "callData", "params": { "name": "createPost" } },
+            { "action": "navigate", "params": { "to": "/admin/posts" } }
+          ]
+        }
+      },
+      "title-field": {
+        "type": "TextField",
+        "props": {
+          "label": "Title",
+          "value": { "$bindState": "/form/title" },
+          "required": true,
+          "placeholder": "Enter post title…"
+        },
+        "children": [],
+        "actions": {
+          "change": {
+            "action": "runBehaviour",
+            "params": { "file": "slug-autogenerate", "fn": "onTitleChange" }
+          }
+        }
+      },
+      "slug-field": {
+        "type": "TextField",
+        "props": {
+          "label": "Slug",
+          "value": { "$bindState": "/form/slug" },
+          "placeholder": "auto-generated from title"
+        },
+        "children": []
+      },
+      "category-field": {
+        "type": "Select",
+        "props": {
+          "label": "Category",
+          "value": { "$bindState": "/form/category" },
+          "options": { "$state": "/data/categories/items" }
+        },
+        "children": []
+      },
+      "body-field": {
+        "type": "TextArea",
+        "props": {
+          "label": "Body",
+          "value": { "$bindState": "/form/body" },
+          "rows": 12
+        },
+        "children": []
+      },
+      "save-btn": {
+        "type": "Button",
+        "props": {
+          "label": "Save Draft",
+          "variant": "primary",
+          "loading": { "$state": "/data/createPost/_loading" }
+        },
+        "children": []
+      }
+    }
+  }
+}

@@ -100,6 +100,10 @@ function resolveId(id: DataCall['id'], store: StateStore): string {
     const value = store.get(`/route/params/${id.$route}`)
     return String(value ?? '')
   }
+  if (id !== undefined && '$state' in id) {
+    const value = store.get(id.$state)
+    return String(value ?? '')
+  }
   throw new Error('DataCall is missing an id field')
 }
 

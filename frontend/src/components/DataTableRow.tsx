@@ -1,3 +1,4 @@
+import { useData } from '@json-render/react'
 import type { ComponentRenderProps } from '@json-render/react'
 import { useDataTableContext } from './DataTable.js'
 
@@ -9,13 +10,21 @@ interface DataTableRowProps {
 export function DataTableRow(rawProps: ComponentRenderProps) {
   const { onClick, ...cellProps } = rawProps as unknown as DataTableRowProps
   const { columns, onRowClick } = useDataTableContext()
+  const { set } = useData()
 
-  const handleClick = onClick ?? onRowClick
+  const handleClick = () => {
+    // Store the row's id so navigate templates can use ${/ui/tableSelectedId}
+    const id = (cellProps as Record<string, unknown>).id
+    if (id != null) set('/ui/tableSelectedId', id)
+    ;(onClick ?? onRowClick)?.()
+  }
+
+  const hasClickHandler = Boolean(onClick ?? onRowClick)
 
   return (
     <tr
-      onClick={handleClick}
-      className={handleClick ? 'cursor-pointer hover:bg-gray-50 transition-colors' : undefined}
+      onClick={hasClickHandler ? handleClick : undefined}
+      className={hasClickHandler ? 'cursor-pointer hover:bg-gray-50 transition-colors' : undefined}
     >
       {columns.map((col) => {
         const val = cellProps[col.key]

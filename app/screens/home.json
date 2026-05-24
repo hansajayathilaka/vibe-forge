@@ -1,0 +1,85 @@
+{
+  "$schema": "../../shared/schemas/ui-screen.schema.json",
+  "id": "home",
+  "title": "Blog",
+  "route": "/",
+  "data": [
+    {
+      "name": "categories",
+      "action": "list",
+      "collection": "categories",
+      "sort": "name",
+      "trigger": "load"
+    },
+    {
+      "name": "posts",
+      "action": "list",
+      "collection": "posts",
+      "filter": "status = 'published'",
+      "sort": "-created",
+      "expand": "author,category",
+      "trigger": "load"
+    }
+  ],
+  "spec": {
+    "root": "page",
+    "state": {
+      "ui": { "categoryFilter": "", "tableSelectedId": "" }
+    },
+    "elements": {
+      "page": {
+        "type": "Column",
+        "props": { "gap": 6, "padding": 8 },
+        "children": ["page-heading", "filter-row", "posts-table"]
+      },
+      "page-heading": {
+        "type": "Text",
+        "props": { "text": "Blog", "variant": "h1" },
+        "children": []
+      },
+      "filter-row": {
+        "type": "Row",
+        "props": { "gap": 4, "align": "center" },
+        "children": ["category-filter"]
+      },
+      "category-filter": {
+        "type": "Select",
+        "props": {
+          "label": "Filter by category",
+          "value": { "$bindState": "/ui/categoryFilter" },
+          "options": { "$state": "/data/categories/items" }
+        },
+        "children": [],
+        "actions": {
+          "change": { "action": "callData", "params": { "name": "posts" } }
+        }
+      },
+      "posts-table": {
+        "type": "DataTable",
+        "props": {
+          "columns": [
+            { "key": "title", "label": "Title" },
+            { "key": "expand.category.name", "label": "Category" },
+            { "key": "created", "label": "Published" }
+          ],
+          "emptyMessage": "No published posts yet."
+        },
+        "children": ["post-row"]
+      },
+      "post-row": {
+        "type": "DataTableRow",
+        "repeat": { "statePath": "/data/posts/items", "key": "id" },
+        "props": {
+          "id": { "$item": "id" },
+          "title": { "$item": "title" },
+          "expand.category.name": { "$item": "expand.category.name" },
+          "created": { "$item": "created" }
+        },
+        "children": [],
+        "actions": {
+          "click": { "action": "navigate", "params": { "to": "/posts/${/ui/tableSelectedId}" } }
+        }
+      }
+    }
+  }
+}
