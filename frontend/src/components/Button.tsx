@@ -1,14 +1,14 @@
 import type { ComponentRenderProps } from '@json-render/react'
 import type { Action } from '@json-render/core'
 import type { UiActionDef } from '@shared/types/index.js'
-import { cx } from './tailwind.js'
+import { cx, elemCls } from './tailwind.js'
 
 type Variant = 'primary' | 'secondary' | 'danger' | 'ghost'
 
 const VARIANT_CLASS: Record<Variant, string> = {
-  primary: 'bg-blue-600 text-white hover:bg-blue-700 border-transparent',
+  primary: 'bg-vf-primary text-vf-primary-text hover:bg-vf-primary-hover border-transparent',
   secondary: 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300',
-  danger: 'bg-red-600 text-white hover:bg-red-700 border-transparent',
+  danger: 'bg-vf-danger text-vf-danger-text hover:bg-vf-danger-hover border-transparent',
   ghost: 'bg-transparent text-gray-600 hover:bg-gray-100 border-transparent',
 }
 
@@ -39,9 +39,10 @@ export function Button({ element, onAction }: ComponentRenderProps) {
       onClick={handleClick}
       disabled={isDisabled}
       className={cx(
-        'inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-md border transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
+        'inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-vf-sm border transition-colors focus:outline-none focus:ring-2 focus:ring-vf-primary focus:ring-offset-2',
         VARIANT_CLASS[v] ?? VARIANT_CLASS.primary,
         isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
+        elemCls(element),
       )}
     >
       {Boolean(loading) && (

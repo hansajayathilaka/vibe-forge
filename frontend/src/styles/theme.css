@@ -1,0 +1,30 @@
+/**
+ * VibeForge platform default theme.
+ * Override any of these variables in app/styles/theme.css.
+ */
+:root {
+  /* Brand — primary actions, focus rings, links */
+  --vf-color-primary: #3b82f6;
+  --vf-color-primary-hover: #2563eb;
+  --vf-color-primary-text: #ffffff;
+
+  /* Destructive actions */
+  --vf-color-danger: #ef4444;
+  --vf-color-danger-hover: #dc2626;
+  --vf-color-danger-text: #ffffff;
+
+  /* Card / panel surfaces */
+  --vf-color-surface: #ffffff;
+  --vf-color-surface-border: #e5e7eb;
+
+  /* Input fields */
+  --vf-color-input-border: #d1d5db;
+  --vf-color-input-ring: #3b82f6;
+
+  /* Shape */
+  --vf-radius: 0.5rem;
+  --vf-radius-sm: 0.375rem;
+
+  /* Typography */
+  --vf-font-sans: ui-sans-serif, system-ui, -apple-system, sans-serif;
+}

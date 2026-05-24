@@ -1,6 +1,7 @@
 import type { ComponentRenderProps } from '@json-render/react'
 import { useData } from '@json-render/react'
 import { useState } from 'react'
+import { cx, elemCls } from './tailwind.js'
 
 interface ImageProps {
   src?: unknown
@@ -36,7 +37,7 @@ export function Image({ element }: ComponentRenderProps) {
       alt={alt}
       width={width ?? undefined}
       height={height ?? undefined}
-      className="max-w-full rounded"
+      className={cx('max-w-full rounded', elemCls(element))}
       onError={() => setErrored(true)}
     />
   )

@@ -1,5 +1,6 @@
 import type { ComponentRenderProps } from '@json-render/react'
 import type { Action } from '@json-render/core'
+import { cx, elemCls } from './tailwind.js'
 import type { UiActionDef } from '@shared/types/index.js'
 
 interface FormProps {
@@ -19,7 +20,7 @@ export function Form({ element, children, onAction }: ComponentRenderProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit} className={cx('flex flex-col gap-4', elemCls(element))}>
       {children}
     </form>
   )

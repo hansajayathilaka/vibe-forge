@@ -1,4 +1,5 @@
 import type { ComponentRenderProps } from '@json-render/react'
+import { cx, elemCls } from './tailwind.js'
 
 const SIZE_CLASS: Record<number, string> = {
   1: 'h-1 w-1', 2: 'h-2 w-2', 3: 'h-3 w-3', 4: 'h-4 w-4',
@@ -12,5 +13,5 @@ interface SpacerProps {
 
 export function Spacer({ element }: ComponentRenderProps) {
   const { size = 4 } = element.props as SpacerProps
-  return <div className={SIZE_CLASS[size ?? 4] ?? 'h-4 w-4'} />
+  return <div className={cx(SIZE_CLASS[size ?? 4] ?? 'h-4 w-4', elemCls(element))} />
 }

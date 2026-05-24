@@ -1,5 +1,6 @@
 import { createContext, useContext } from 'react'
 import type { ComponentRenderProps } from '@json-render/react'
+import { cx, elemCls } from './tailwind.js'
 
 export interface DataTableColumn {
   key: string
@@ -27,7 +28,7 @@ export function DataTable({ element, children }: ComponentRenderProps) {
 
   return (
     <DataTableContext.Provider value={{ columns }}>
-      <div className="overflow-x-auto rounded-lg border border-gray-200">
+      <div className={cx('overflow-x-auto rounded-vf border border-vf-surface-border', elemCls(element))}>
         <table className="min-w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-gray-50">
             <tr>

@@ -1,0 +1,32 @@
+/**
+ * VibeForge app theme — customise this file to brand your app.
+ * This file is served by PocketBase and loaded at runtime, so changes
+ * take effect on the next page load without rebuilding the frontend.
+ *
+ * Only override the variables you want to change; everything else
+ * falls back to the platform defaults defined in
+ * frontend/src/styles/theme.css.
+ */
+:root {
+  /* Primary brand color — buttons, focus rings, active states */
+  /* --vf-color-primary: #3b82f6; */
+  /* --vf-color-primary-hover: #2563eb; */
+  /* --vf-color-primary-text: #ffffff; */
+
+  /* Danger / destructive actions */
+  /* --vf-color-danger: #ef4444; */
+  /* --vf-color-danger-hover: #dc2626; */
+  /* --vf-color-danger-text: #ffffff; */
+
+  /* Card and panel surfaces */
+  /* --vf-color-surface: #ffffff; */
+  /* --vf-color-surface-border: #e5e7eb; */
+
+  /* Input field borders and focus rings */
+  /* --vf-color-input-border: #d1d5db; */
+  /* --vf-color-input-ring: #3b82f6; */
+
+  /* Border radius (e.g. 0.25rem for sharp, 0.75rem for rounder) */
+  /* --vf-radius: 0.5rem; */
+  /* --vf-radius-sm: 0.375rem; */
+}

@@ -1,5 +1,6 @@
 import type { ComponentRenderProps } from '@json-render/react'
 import { useData } from '@json-render/react'
+import { elemCls } from './tailwind.js'
 
 type BadgeColor = 'green' | 'yellow' | 'red' | 'blue' | 'gray'
 
@@ -28,7 +29,7 @@ export function Badge({ element }: ComponentRenderProps) {
   const c = (color ?? 'gray') as BadgeColor
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${COLOR_CLASS[c] ?? COLOR_CLASS.gray}`}
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${COLOR_CLASS[c] ?? COLOR_CLASS.gray}${elemCls(element) ? ` ${elemCls(element)}` : ''}`}
     >
       {String(label ?? '')}
     </span>

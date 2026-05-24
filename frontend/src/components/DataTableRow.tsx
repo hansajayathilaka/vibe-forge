@@ -1,6 +1,7 @@
 import { useData } from '@json-render/react'
 import type { ComponentRenderProps } from '@json-render/react'
 import type { Action } from '@json-render/core'
+import { cx, elemCls } from './tailwind.js'
 import type { UiActionDef } from '@shared/types/index.js'
 import { useDataTableContext } from './DataTable.js'
 
@@ -29,7 +30,7 @@ export function DataTableRow({ element, onAction }: ComponentRenderProps) {
   return (
     <tr
       onClick={hasClickHandler ? handleClick : undefined}
-      className={hasClickHandler ? 'cursor-pointer hover:bg-gray-50 transition-colors' : undefined}
+      className={cx(hasClickHandler ? 'cursor-pointer hover:bg-gray-50 transition-colors' : undefined, elemCls(element))}
     >
       {columns.map((col) => {
         const val = (cellProps as Record<string, unknown>)[col.key]
