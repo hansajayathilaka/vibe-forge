@@ -198,6 +198,26 @@ Each element in `spec.elements` follows this structure:
 | `repeat` | Repeat the element for each item in a state array |
 | `showIf` | Conditionally show/hide the element based on a state value |
 
+### Universal `className` prop
+
+Every element accepts an optional `className` string in its `props`. The value is appended to the component's root DOM element after its built-in Tailwind classes, so you can add layout, sizing, or spacing utilities without replacing component styles:
+
+```json
+{
+  "id": "save-btn",
+  "type": "Button",
+  "props": { "label": "Save", "variant": "primary", "className": "w-full mt-2" }
+}
+```
+
+```json
+{
+  "id": "hero-card",
+  "type": "Card",
+  "props": { "padding": 8, "className": "max-w-2xl mx-auto" }
+}
+```
+
 ### Element ID Naming Convention
 
 Use descriptive, semantic IDs — not generic ones:
@@ -410,6 +430,29 @@ Use descriptive, semantic IDs — not generic ones:
   "children": ["details-tab-content", "preview-tab-content"]
 }
 ```
+
+---
+
+## Theme & Styling
+
+### Global theme variables
+
+The app theme is defined in `app/styles/theme.css` as CSS custom properties. Components use these variables via Tailwind, so changing a variable updates the entire UI:
+
+| Variable | Default | Controls |
+|----------|---------|---------|
+| `--vf-color-primary` | `#3b82f6` | Primary buttons, focus rings, active states |
+| `--vf-color-primary-hover` | `#2563eb` | Hover state of primary colour |
+| `--vf-color-primary-text` | `#ffffff` | Text on primary buttons |
+| `--vf-color-danger` | `#ef4444` | Danger/destructive buttons |
+| `--vf-color-surface` | `#ffffff` | Card and panel backgrounds |
+| `--vf-color-surface-border` | `#e5e7eb` | Card and panel borders |
+| `--vf-color-input-border` | `#d1d5db` | Input field borders |
+| `--vf-color-input-ring` | `#3b82f6` | Focus ring on inputs |
+| `--vf-radius` | `0.5rem` | Card and modal border radius |
+| `--vf-radius-sm` | `0.375rem` | Button and input border radius |
+
+Uncomment variables in `app/styles/theme.css` and set new hex values. Changes apply on the next browser page load — no rebuild required. Run `/gen-theme` to have Claude generate a palette from a description.
 
 ---
 

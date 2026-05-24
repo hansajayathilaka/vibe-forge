@@ -33,6 +33,7 @@ function buildPrompt(): string {
   lines.push('- Always define data calls in the screen `data` array, not inline in elements.')
   lines.push('- Use Column as the root element for all screens.')
   lines.push('- Use descriptive element IDs like "post-title-field" not "field1".')
+  lines.push('- Every component accepts an optional `className` prop (string) to append Tailwind utility classes to its root element.')
   lines.push('')
   lines.push('---')
   lines.push('')
