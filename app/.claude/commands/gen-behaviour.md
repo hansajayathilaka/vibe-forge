@@ -6,7 +6,7 @@ You are generating a VibeForge behaviour file. Read the following spec file in f
 
 `@.claude/prompts/behaviour-file-spec.md` — behaviour file contract, BehaviourContext interface, state paths, and common patterns
 
-Then generate `app/behaviours/<name>.js` for the interaction described by the user.
+Then generate `behaviours/<name>.js` for the interaction described by the user.
 
 ## Rules
 
@@ -20,7 +20,7 @@ Then generate `app/behaviours/<name>.js` for the interaction described by the us
 
 ## Output
 
-Create the complete behaviour file at `app/behaviours/<name>.js`.
+Create the complete behaviour file at `behaviours/<name>.js`.
 
 After generating the file, show how to wire it into a screen element using a `runBehaviour` action:
 

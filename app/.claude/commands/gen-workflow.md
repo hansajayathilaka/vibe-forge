@@ -10,7 +10,7 @@ Then generate a hook file for the workflow described by the user.
 
 ## Rules
 
-- File path: `app/hooks/<name>.pb.js`
+- File path: `hooks/<name>.pb.js`
 - Use the correct hook function: `onRecordCreate`, `onRecordUpdate`, `onRecordBeforeUpdate`, etc.
 - Always call `return e.next()` at the end of the handler to continue the event chain
 - Use `e.record.original().get("field")` to access the pre-update value of a field
@@ -21,10 +21,10 @@ Then generate a hook file for the workflow described by the user.
 
 ## Output
 
-Create the complete hook file at `app/hooks/<name>.pb.js`.
+Create the complete hook file at `hooks/<name>.pb.js`.
 
 After generating, remind the user to:
-1. Run `pnpm setup` from the repo root — this copies hooks from `app/hooks/` to `backend/pb_hooks/`
-2. Restart PocketBase for the hook to take effect
+1. Run `pnpm setup` from the repo root (one level up) — this copies hooks from `hooks/` to `../backend/pb_hooks/`
+2. Restart PocketBase for the hook to take effect (stop and re-run `pnpm dev` from the repo root)
 
 Generate the hook file now based on the user's workflow description.

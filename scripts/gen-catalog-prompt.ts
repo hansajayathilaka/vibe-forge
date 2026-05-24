@@ -103,5 +103,5 @@ function buildPrompt(): string {
 }
 
 const prompt = buildPrompt()
-writeFileSync('.claude/prompts/catalog-prompt.md', prompt)
-console.log('Catalog prompt written to .claude/prompts/catalog-prompt.md')
+writeFileSync('app/.claude/prompts/catalog-prompt.md', prompt)
+console.log('Catalog prompt written to app/.claude/prompts/catalog-prompt.md')

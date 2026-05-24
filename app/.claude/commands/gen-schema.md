@@ -10,7 +10,7 @@ Then generate a Go migration for the collection described by the user.
 
 ## Rules
 
-- File path: `backend/pb_migrations/<timestamp>_<name>.go` — use a Unix timestamp prefix (e.g. `1700000001_products.go`)
+- File path: `../backend/pb_migrations/<timestamp>_<name>.go` — use a Unix timestamp prefix (e.g. `1700000001_products.go`)
 - Package: `migrations`
 - Always include both the up migration (creating the collection) and the down migration (deleting it)
 - Use the `ptrStr` helper for API rule strings
@@ -21,10 +21,10 @@ Then generate a Go migration for the collection described by the user.
 
 ## Output
 
-Create the complete migration file at `backend/pb_migrations/<timestamp>_<name>.go`.
+Create the complete migration file at `../backend/pb_migrations/<timestamp>_<name>.go`.
 
 After generating, remind the user that:
-- PocketBase will apply the migration automatically on next restart
-- Run `pnpm dev` or restart PocketBase to apply
+- PocketBase applies the migration automatically on next restart
+- Run `pnpm dev` from the repo root (one level up) to restart PocketBase and apply the migration
 
 Generate the migration file now based on the user's entity description.
