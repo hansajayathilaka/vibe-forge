@@ -1,0 +1,92 @@
+{
+  "$schema": "../../shared/schemas/ui-screen.schema.json",
+  "id": "post-detail",
+  "title": "Post",
+  "route": "/posts/:id",
+  "data": [
+    {
+      "name": "post",
+      "action": "get",
+      "collection": "posts",
+      "id": { "$route": "id" },
+      "expand": "author,category",
+      "trigger": "load"
+    }
+  ],
+  "spec": {
+    "root": "page",
+    "elements": {
+      "page": {
+        "type": "Column",
+        "props": { "gap": 6, "padding": 8 },
+        "children": ["back-link", "post-card"]
+      },
+      "back-link": {
+        "type": "Link",
+        "props": { "label": "← Back to blog", "to": "/" },
+        "children": []
+      },
+      "post-card": {
+        "type": "Card",
+        "props": { "padding": 8 },
+        "children": [
+          "post-title",
+          "post-meta-row",
+          "post-divider",
+          "post-body"
+        ]
+      },
+      "post-title": {
+        "type": "Text",
+        "props": {
+          "text": { "$state": "/data/post/title" },
+          "variant": "h1"
+        },
+        "children": []
+      },
+      "post-meta-row": {
+        "type": "Row",
+        "props": { "gap": 4, "align": "center" },
+        "children": ["post-status-badge", "post-category-badge", "post-author-text"]
+      },
+      "post-status-badge": {
+        "type": "Badge",
+        "props": {
+          "label": { "$state": "/data/post/status" },
+          "color": "blue"
+        },
+        "children": []
+      },
+      "post-category-badge": {
+        "type": "Badge",
+        "props": {
+          "label": { "$state": "/data/post/expand/category/name" },
+          "color": "gray"
+        },
+        "children": []
+      },
+      "post-author-text": {
+        "type": "Text",
+        "props": {
+          "text": { "$state": "/data/post/expand/author/name" },
+          "variant": "caption",
+          "color": "gray-500"
+        },
+        "children": []
+      },
+      "post-divider": {
+        "type": "Divider",
+        "props": {},
+        "children": []
+      },
+      "post-body": {
+        "type": "Text",
+        "props": {
+          "text": { "$state": "/data/post/body" },
+          "variant": "body"
+        },
+        "children": []
+      }
+    }
+  }
+}

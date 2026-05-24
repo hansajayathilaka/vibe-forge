@@ -32,7 +32,7 @@ export interface DataCall {
   filter?: string
   sort?: string
   expand?: string
-  id?: string | { $route: string }
+  id?: string | { $route: string } | { $state: string }
   body?: Record<string, string>
   trigger: DataCallTrigger
 }

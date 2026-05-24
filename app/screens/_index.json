@@ -1,3 +1,7 @@
 [
-  { "id": "home", "route": "/", "title": "Home" }
+  { "id": "home", "route": "/", "title": "Home" },
+  { "id": "post-detail", "route": "/posts/:id", "title": "Post" },
+  { "id": "admin-posts", "route": "/admin/posts", "title": "Admin — Posts" },
+  { "id": "post-new", "route": "/admin/posts/new", "title": "New Post" },
+  { "id": "post-edit", "route": "/admin/posts/:id/edit", "title": "Edit Post" }
 ]

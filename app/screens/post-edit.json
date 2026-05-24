@@ -1,0 +1,125 @@
+{
+  "$schema": "../../shared/schemas/ui-screen.schema.json",
+  "id": "post-edit",
+  "title": "Edit Post",
+  "route": "/admin/posts/:id/edit",
+  "data": [
+    {
+      "name": "post",
+      "action": "get",
+      "collection": "posts",
+      "id": { "$route": "id" },
+      "expand": "author,category",
+      "trigger": "load"
+    },
+    {
+      "name": "categories",
+      "action": "list",
+      "collection": "categories",
+      "sort": "name",
+      "trigger": "load"
+    },
+    {
+      "name": "updatePost",
+      "action": "update",
+      "collection": "posts",
+      "id": { "$route": "id" },
+      "body": {
+        "title": "/data/post/title",
+        "slug": "/data/post/slug",
+        "body": "/data/post/body",
+        "category": "/data/post/category",
+        "status": "/data/post/status"
+      },
+      "trigger": "manual"
+    }
+  ],
+  "spec": {
+    "root": "page",
+    "elements": {
+      "page": {
+        "type": "Column",
+        "props": { "gap": 6, "padding": 8 },
+        "children": ["back-link", "page-title", "post-form"]
+      },
+      "back-link": {
+        "type": "Link",
+        "props": { "label": "← Back to posts", "to": "/admin/posts" },
+        "children": []
+      },
+      "page-title": {
+        "type": "Text",
+        "props": { "text": "Edit Post", "variant": "h1" },
+        "children": []
+      },
+      "post-form": {
+        "type": "Form",
+        "props": {},
+        "children": ["title-field", "slug-field", "status-field", "category-field", "body-field", "save-btn"],
+        "actions": {
+          "submit": [
+            { "action": "callData", "params": { "name": "updatePost" } },
+            { "action": "navigate", "params": { "to": "/admin/posts" } }
+          ]
+        }
+      },
+      "title-field": {
+        "type": "TextField",
+        "props": {
+          "label": "Title",
+          "value": { "$bindState": "/data/post/title" },
+          "required": true
+        },
+        "children": []
+      },
+      "slug-field": {
+        "type": "TextField",
+        "props": {
+          "label": "Slug",
+          "value": { "$bindState": "/data/post/slug" }
+        },
+        "children": []
+      },
+      "status-field": {
+        "type": "Select",
+        "props": {
+          "label": "Status",
+          "value": { "$bindState": "/data/post/status" },
+          "options": [
+            { "label": "Draft", "value": "draft" },
+            { "label": "Pending Review", "value": "pending_review" },
+            { "label": "Published", "value": "published" }
+          ]
+        },
+        "children": []
+      },
+      "category-field": {
+        "type": "Select",
+        "props": {
+          "label": "Category",
+          "value": { "$bindState": "/data/post/category" },
+          "options": { "$state": "/data/categories/items" }
+        },
+        "children": []
+      },
+      "body-field": {
+        "type": "TextArea",
+        "props": {
+          "label": "Body",
+          "value": { "$bindState": "/data/post/body" },
+          "rows": 12
+        },
+        "children": []
+      },
+      "save-btn": {
+        "type": "Button",
+        "props": {
+          "label": "Save Changes",
+          "variant": "primary",
+          "loading": { "$state": "/data/updatePost/_loading" }
+        },
+        "children": []
+      }
+    }
+  }
+}

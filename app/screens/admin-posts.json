@@ -1,0 +1,152 @@
+{
+  "$schema": "../../shared/schemas/ui-screen.schema.json",
+  "id": "admin-posts",
+  "title": "Admin — Posts",
+  "route": "/admin/posts",
+  "data": [
+    {
+      "name": "posts",
+      "action": "list",
+      "collection": "posts",
+      "sort": "-created",
+      "expand": "author,category",
+      "trigger": "load"
+    },
+    {
+      "name": "deletePost",
+      "action": "delete",
+      "collection": "posts",
+      "id": { "$state": "/ui/tableSelectedId" },
+      "trigger": "manual"
+    }
+  ],
+  "spec": {
+    "root": "page",
+    "state": {
+      "ui": {
+        "confirmDeleteOpen": false,
+        "tableSelectedId": ""
+      }
+    },
+    "elements": {
+      "page": {
+        "type": "Column",
+        "props": { "gap": 6, "padding": 8 },
+        "children": ["page-header-row", "posts-table", "table-actions-row", "delete-modal"]
+      },
+      "page-header-row": {
+        "type": "Row",
+        "props": { "gap": 4, "align": "center" },
+        "children": ["page-heading", "new-post-btn"]
+      },
+      "page-heading": {
+        "type": "Text",
+        "props": { "text": "All Posts", "variant": "h1" },
+        "children": []
+      },
+      "new-post-btn": {
+        "type": "Button",
+        "props": { "label": "New Post", "variant": "primary" },
+        "children": [],
+        "actions": {
+          "click": { "action": "navigate", "params": { "to": "/admin/posts/new" } }
+        }
+      },
+      "posts-table": {
+        "type": "DataTable",
+        "props": {
+          "columns": [
+            { "key": "title", "label": "Title" },
+            { "key": "status", "label": "Status" },
+            { "key": "expand.category.name", "label": "Category" },
+            { "key": "created", "label": "Created" }
+          ],
+          "emptyMessage": "No posts yet. Create your first post."
+        },
+        "children": ["post-row"]
+      },
+      "post-row": {
+        "type": "DataTableRow",
+        "repeat": { "statePath": "/data/posts/items", "key": "id" },
+        "props": {
+          "id": { "$item": "id" },
+          "title": { "$item": "title" },
+          "status": { "$item": "status" },
+          "expand.category.name": { "$item": "expand.category.name" },
+          "created": { "$item": "created" }
+        },
+        "children": [],
+        "actions": {
+          "click": { "action": "navigate", "params": { "to": "/admin/posts/${/ui/tableSelectedId}/edit" } }
+        }
+      },
+      "table-actions-row": {
+        "type": "Row",
+        "props": { "gap": 4, "align": "center" },
+        "children": ["edit-selected-btn", "delete-selected-btn"]
+      },
+      "edit-selected-btn": {
+        "type": "Button",
+        "props": { "label": "Edit Selected", "variant": "secondary" },
+        "children": [],
+        "actions": {
+          "click": { "action": "navigate", "params": { "to": "/admin/posts/${/ui/tableSelectedId}/edit" } }
+        }
+      },
+      "delete-selected-btn": {
+        "type": "Button",
+        "props": { "label": "Delete Selected", "variant": "danger" },
+        "children": [],
+        "actions": {
+          "click": {
+            "action": "runBehaviour",
+            "params": { "file": "confirm-delete", "fn": "onDeleteClick" }
+          }
+        }
+      },
+      "delete-modal": {
+        "type": "Modal",
+        "props": { "title": "Confirm Delete" },
+        "showIf": { "$state": "/ui/confirmDeleteOpen" },
+        "children": ["modal-body-text", "modal-actions-row"]
+      },
+      "modal-body-text": {
+        "type": "Text",
+        "props": { "text": "Are you sure you want to delete this post? This action cannot be undone.", "variant": "body" },
+        "children": []
+      },
+      "modal-actions-row": {
+        "type": "Row",
+        "props": { "gap": 4 },
+        "children": ["modal-cancel-btn", "modal-confirm-btn"]
+      },
+      "modal-cancel-btn": {
+        "type": "Button",
+        "props": { "label": "Cancel", "variant": "secondary" },
+        "children": [],
+        "actions": {
+          "click": {
+            "action": "runBehaviour",
+            "params": { "file": "confirm-delete", "fn": "onCancelDelete" }
+          }
+        }
+      },
+      "modal-confirm-btn": {
+        "type": "Button",
+        "props": {
+          "label": "Delete",
+          "variant": "danger",
+          "loading": { "$state": "/data/deletePost/_loading" }
+        },
+        "children": [],
+        "actions": {
+          "click": [
+            { "action": "runBehaviour", "params": { "file": "confirm-delete", "fn": "onConfirmDelete" } },
+            { "action": "callData", "params": { "name": "deletePost" } },
+            { "action": "callData", "params": { "name": "posts" } }
+          ]
+        }
+      }
+    }
+  }
+}
