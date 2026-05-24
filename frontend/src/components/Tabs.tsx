@@ -3,7 +3,7 @@ import { useData } from '@json-render/react'
 import { Children } from 'react'
 import type { Action } from '@json-render/core'
 import type { UiActionDef } from '@shared/types/index.js'
-import { cx } from './tailwind.js'
+import { cx, elemCls } from './tailwind.js'
 
 interface TabDef {
   id: string
@@ -38,7 +38,7 @@ export function Tabs({ element, children, onAction }: ComponentRenderProps) {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className={cx('flex flex-col', elemCls(element))}>
       <div className="flex border-b border-gray-200" role="tablist">
         {tabs.map((tab) => (
           <button

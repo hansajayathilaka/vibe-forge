@@ -30,3 +30,8 @@ export function alignClass(a?: string | null): string {
 export function cx(...classes: (string | undefined | null | false)[]): string {
   return classes.filter(Boolean).join(' ')
 }
+
+export function elemCls(element: { props: Record<string, unknown> }): string | undefined {
+  const cls = element.props.className
+  return typeof cls === 'string' ? cls : undefined
+}

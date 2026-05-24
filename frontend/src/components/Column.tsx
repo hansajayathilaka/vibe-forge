@@ -1,5 +1,5 @@
 import type { ComponentRenderProps } from '@json-render/react'
-import { gapClass, padClass, alignClass, cx } from './tailwind.js'
+import { gapClass, padClass, alignClass, cx, elemCls } from './tailwind.js'
 
 interface ColumnProps {
   gap?: number | null
@@ -10,7 +10,7 @@ interface ColumnProps {
 export function Column({ element, children }: ComponentRenderProps) {
   const { gap, padding, align } = element.props as ColumnProps
   return (
-    <div className={cx('flex flex-col', gapClass(gap), padClass(padding), alignClass(align))}>
+    <div className={cx('flex flex-col', gapClass(gap), padClass(padding), alignClass(align), elemCls(element))}>
       {children}
     </div>
   )

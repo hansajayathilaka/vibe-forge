@@ -1,5 +1,6 @@
 import type { ComponentRenderProps } from '@json-render/react'
 import { useData } from '@json-render/react'
+import { elemCls } from './tailwind.js'
 
 type Variant = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'body' | 'caption'
 
@@ -33,7 +34,8 @@ export function Text({ element }: ComponentRenderProps) {
   const cls = VARIANT_CLASS[v] ?? VARIANT_CLASS.body
   const tag = v.startsWith('h') ? v : 'p'
   const style = color ? { color } : undefined
-  const props = { className: cls, style, children: String(text ?? '') }
+  const extra = elemCls(element)
+  const props = { className: extra ? `${cls} ${extra}` : cls, style, children: String(text ?? '') }
   return tag === 'h1' ? <h1 {...props} />
     : tag === 'h2' ? <h2 {...props} />
     : tag === 'h3' ? <h3 {...props} />

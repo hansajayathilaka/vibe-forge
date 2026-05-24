@@ -1,5 +1,5 @@
 import type { ComponentRenderProps } from '@json-render/react'
-import { gapClass, padClass, alignClass, cx } from './tailwind.js'
+import { gapClass, padClass, alignClass, cx, elemCls } from './tailwind.js'
 
 interface RowProps {
   gap?: number | null
@@ -18,6 +18,7 @@ export function Row({ element, children }: ComponentRenderProps) {
         padClass(padding),
         alignClass(align),
         wrap ? 'flex-wrap' : undefined,
+        elemCls(element),
       )}
     >
       {children}

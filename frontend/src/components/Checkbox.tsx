@@ -2,6 +2,7 @@ import type { ComponentRenderProps } from '@json-render/react'
 import { useDataBinding } from '@json-render/react'
 import type { Action } from '@json-render/core'
 import type { UiActionDef } from '@shared/types/index.js'
+import { cx, elemCls } from './tailwind.js'
 
 interface CheckboxProps {
   label: string
@@ -30,12 +31,12 @@ export function Checkbox({ element, onAction }: ComponentRenderProps) {
   }
 
   return (
-    <label className="flex items-center gap-2 cursor-pointer">
+    <label className={cx('flex items-center gap-2 cursor-pointer', elemCls(element))}>
       <input
         type="checkbox"
         checked={isChecked}
         onChange={handleChange}
-        className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+        className="h-4 w-4 rounded border-vf-input-border text-vf-primary focus:ring-vf-input-ring"
       />
       <span className="text-sm text-gray-700">{label}</span>
     </label>
