@@ -17,7 +17,7 @@ This file tracks the build status of all Phase 1 tasks. The `/next-task` slash c
 | TASK-09 | Router | `done` | TASK-05 |
 | TASK-10 | Claude Code Integration | `done` | TASK-02, TASK-08 |
 | TASK-11 | Example Application (Blog) | `done` | TASK-06, TASK-07, TASK-08, TASK-09, TASK-10 |
-| TASK-12 | Template Finalisation | `pending` | TASK-11 |
+| TASK-12 | Template Finalisation | `done` | TASK-11 |
 
 ---
 
