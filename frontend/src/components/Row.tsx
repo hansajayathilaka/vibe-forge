@@ -6,11 +6,10 @@ interface RowProps {
   padding?: number | null
   align?: 'start' | 'center' | 'end' | 'stretch' | null
   wrap?: boolean | null
-  children?: React.ReactNode
 }
 
-export function Row(rawProps: ComponentRenderProps) {
-  const { gap, padding, align, wrap, children } = rawProps as RowProps
+export function Row({ element, children }: ComponentRenderProps) {
+  const { gap, padding, align, wrap } = element.props as RowProps
   return (
     <div
       className={cx(

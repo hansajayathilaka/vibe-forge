@@ -1,25 +1,30 @@
 import { useData } from '@json-render/react'
 import type { ComponentRenderProps } from '@json-render/react'
+import type { Action } from '@json-render/core'
+import type { UiActionDef } from '@shared/types/index.js'
 import { useDataTableContext } from './DataTable.js'
 
 interface DataTableRowProps {
-  onClick?: () => void
+  id?: unknown
+  _actions?: Record<string, UiActionDef | UiActionDef[]>
   [key: string]: unknown
 }
 
-export function DataTableRow(rawProps: ComponentRenderProps) {
-  const { onClick, ...cellProps } = rawProps as unknown as DataTableRowProps
-  const { columns, onRowClick } = useDataTableContext()
+export function DataTableRow({ element, onAction }: ComponentRenderProps) {
+  const { _actions, id, ...cellProps } = element.props as DataTableRowProps
+  const { columns } = useDataTableContext()
   const { set } = useData()
 
   const handleClick = () => {
-    // Store the row's id so navigate templates can use ${/ui/tableSelectedId}
-    const id = (cellProps as Record<string, unknown>).id
     if (id != null) set('/ui/tableSelectedId', id)
-    ;(onClick ?? onRowClick)?.()
+    const raw = _actions?.click
+    const chain: UiActionDef[] = Array.isArray(raw) ? raw : raw ? [raw] : []
+    for (const def of chain) {
+      void onAction?.({ name: def.action, params: def.params } as Action)
+    }
   }
 
-  const hasClickHandler = Boolean(onClick ?? onRowClick)
+  const hasClickHandler = Boolean(_actions?.click)
 
   return (
     <tr
@@ -27,7 +32,7 @@ export function DataTableRow(rawProps: ComponentRenderProps) {
       className={hasClickHandler ? 'cursor-pointer hover:bg-gray-50 transition-colors' : undefined}
     >
       {columns.map((col) => {
-        const val = cellProps[col.key]
+        const val = (cellProps as Record<string, unknown>)[col.key]
         return (
           <td key={col.key} className="px-4 py-3 text-gray-700 whitespace-nowrap">
             {val != null ? String(val) : '—'}

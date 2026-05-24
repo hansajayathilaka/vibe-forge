@@ -1,4 +1,5 @@
 import type { ComponentRenderProps } from '@json-render/react'
+import { useData } from '@json-render/react'
 
 type Variant = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'body' | 'caption'
 
@@ -19,8 +20,15 @@ interface TextProps {
   color?: string | null
 }
 
-export function Text(rawProps: ComponentRenderProps) {
-  const { text, variant = 'body', color } = rawProps as TextProps
+export function Text({ element }: ComponentRenderProps) {
+  const { get } = useData()
+  const { text: rawText, variant = 'body', color } = element.props as TextProps
+
+  let text: unknown = rawText
+  if (rawText !== null && typeof rawText === 'object' && '$state' in rawText) {
+    text = get((rawText as { '$state': string })['$state'])
+  }
+
   const v = (variant ?? 'body') as Variant
   const cls = VARIANT_CLASS[v] ?? VARIANT_CLASS.body
   const tag = v.startsWith('h') ? v : 'p'

@@ -9,11 +9,10 @@ const COLS: Record<number, string> = {
 interface GridProps {
   cols?: number | null
   gap?: number | null
-  children?: React.ReactNode
 }
 
-export function Grid(rawProps: ComponentRenderProps) {
-  const { cols, gap, children } = rawProps as GridProps
+export function Grid({ element, children }: ComponentRenderProps) {
+  const { cols, gap } = element.props as GridProps
   const colClass = cols != null ? (COLS[cols] ?? '') : ''
   return (
     <div className={cx('grid', colClass, gapClass(gap))}>

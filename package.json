@@ -8,7 +8,8 @@
     "dev": "concurrently --names \"pb,vite\" --prefix-colors \"blue,green\" \"cd backend && ./pocketbase serve --publicDir ../app\" \"pnpm --filter frontend dev\"",
     "build": "pnpm --filter frontend build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "tsc": "tsc -p frontend/tsconfig.json --noEmit && tsc -p shared/tsconfig.json --noEmit"
+    "tsc": "tsc -p frontend/tsconfig.json --noEmit && tsc -p shared/tsconfig.json --noEmit",
+    "test": "pnpm --filter frontend test"
   },
   "pnpm": {
     "onlyBuiltDependencies": ["esbuild"]

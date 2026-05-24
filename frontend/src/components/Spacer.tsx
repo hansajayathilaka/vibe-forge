@@ -7,10 +7,10 @@ const SIZE_CLASS: Record<number, string> = {
 }
 
 interface SpacerProps {
-  size?: number
+  size?: number | null
 }
 
-export function Spacer(rawProps: ComponentRenderProps) {
-  const { size = 4 } = rawProps as SpacerProps
-  return <div className={SIZE_CLASS[size] ?? 'h-4 w-4'} />
+export function Spacer({ element }: ComponentRenderProps) {
+  const { size = 4 } = element.props as SpacerProps
+  return <div className={SIZE_CLASS[size ?? 4] ?? 'h-4 w-4'} />
 }

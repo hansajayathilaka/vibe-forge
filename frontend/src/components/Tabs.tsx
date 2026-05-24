@@ -1,5 +1,8 @@
 import type { ComponentRenderProps } from '@json-render/react'
+import { useData } from '@json-render/react'
 import { Children } from 'react'
+import type { Action } from '@json-render/core'
+import type { UiActionDef } from '@shared/types/index.js'
 import { cx } from './tailwind.js'
 
 interface TabDef {
@@ -10,18 +13,29 @@ interface TabDef {
 interface TabsProps {
   tabs: TabDef[]
   activeTab?: unknown
-  onChange?: (id: string) => void
-  onActiveTabChange?: (id: string) => void
-  children?: React.ReactNode
+  _actions?: Record<string, UiActionDef | UiActionDef[]>
 }
 
-export function Tabs(rawProps: ComponentRenderProps) {
-  const { tabs = [], activeTab, onChange, onActiveTabChange, children } = rawProps as unknown as TabsProps
+export function Tabs({ element, children, onAction }: ComponentRenderProps) {
+  const { get } = useData()
+  const { tabs = [], activeTab: activeTabRaw, _actions } = element.props as unknown as TabsProps
 
-  const setTab = onChange ?? onActiveTabChange
-  const active = activeTab != null ? String(activeTab) : (tabs[0]?.id ?? '')
+  let activeTabVal: unknown = activeTabRaw
+  if (activeTabRaw !== null && typeof activeTabRaw === 'object' && '$state' in activeTabRaw) {
+    activeTabVal = get((activeTabRaw as { '$state': string })['$state'])
+  }
+
+  const active = activeTabVal != null ? String(activeTabVal) : (tabs[0]?.id ?? '')
 
   const childArray = Children.toArray(children)
+
+  const handleTabClick = (tabId: string) => {
+    const raw = _actions?.tabChange
+    const chain: UiActionDef[] = Array.isArray(raw) ? raw : raw ? [raw] : []
+    for (const def of chain) {
+      void onAction?.({ name: def.action, params: { ...def.params, tabId } } as Action)
+    }
+  }
 
   return (
     <div className="flex flex-col">
@@ -32,7 +46,7 @@ export function Tabs(rawProps: ComponentRenderProps) {
             role="tab"
             aria-selected={active === tab.id}
             type="button"
-            onClick={() => setTab?.(tab.id)}
+            onClick={() => handleTabClick(tab.id)}
             className={cx(
               'px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors focus:outline-none',
               active === tab.id
