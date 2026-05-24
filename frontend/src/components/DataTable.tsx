@@ -9,7 +9,6 @@ export interface DataTableColumn {
 
 interface DataTableContextValue {
   columns: DataTableColumn[]
-  onRowClick?: () => void
 }
 
 export const DataTableContext = createContext<DataTableContextValue>({ columns: [] })
@@ -20,16 +19,14 @@ export function useDataTableContext(): DataTableContextValue {
 
 interface DataTableProps {
   columns?: DataTableColumn[]
-  emptyMessage?: string
-  onRowClick?: () => void
-  children?: React.ReactNode
+  emptyMessage?: string | null
 }
 
-export function DataTable(rawProps: ComponentRenderProps) {
-  const { columns = [], emptyMessage = 'No records found.', onRowClick, children } = rawProps as DataTableProps
+export function DataTable({ element, children }: ComponentRenderProps) {
+  const { columns = [], emptyMessage = 'No records found.' } = element.props as DataTableProps
 
   return (
-    <DataTableContext.Provider value={{ columns, onRowClick }}>
+    <DataTableContext.Provider value={{ columns }}>
       <div className="overflow-x-auto rounded-lg border border-gray-200">
         <table className="min-w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-gray-50">
@@ -52,7 +49,7 @@ export function DataTable(rawProps: ComponentRenderProps) {
                   colSpan={columns.length || 1}
                   className="px-4 py-8 text-center text-gray-400"
                 >
-                  {emptyMessage}
+                  {emptyMessage ?? 'No records found.'}
                 </td>
               </tr>
             )}

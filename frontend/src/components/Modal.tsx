@@ -4,17 +4,14 @@ import type { ComponentRenderProps } from '@json-render/react'
 
 interface ModalProps {
   title: string
-  children?: React.ReactNode
 }
 
-export function Modal(rawProps: ComponentRenderProps) {
-  const { title, children } = rawProps as unknown as ModalProps
+export function Modal({ element, children }: ComponentRenderProps) {
+  const { title } = element.props as unknown as ModalProps
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        // Visibility is controlled externally via showIf — fire a synthetic close
-        // event so parent specs can respond if needed. The library handles showIf toggling.
         document.dispatchEvent(new CustomEvent('vf:modal-escape'))
       }
     }

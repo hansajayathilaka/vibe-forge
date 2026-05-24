@@ -1,4 +1,6 @@
 import type { ComponentRenderProps } from '@json-render/react'
+import type { Action } from '@json-render/core'
+import type { UiActionDef } from '@shared/types/index.js'
 import { cx } from './tailwind.js'
 
 type Variant = 'primary' | 'secondary' | 'danger' | 'ghost'
@@ -15,18 +17,26 @@ interface ButtonProps {
   variant?: Variant | null
   disabled?: unknown
   loading?: unknown
-  onClick?: () => void
+  _actions?: Record<string, UiActionDef | UiActionDef[]>
 }
 
-export function Button(rawProps: ComponentRenderProps) {
-  const { label, variant = 'primary', disabled, loading, onClick } = rawProps as unknown as ButtonProps
+export function Button({ element, onAction }: ComponentRenderProps) {
+  const { label, variant = 'primary', disabled, loading, _actions } = element.props as unknown as ButtonProps
   const v = (variant ?? 'primary') as Variant
   const isDisabled = Boolean(disabled) || Boolean(loading)
+
+  const handleClick = () => {
+    const raw = _actions?.click
+    const chain: UiActionDef[] = Array.isArray(raw) ? raw : raw ? [raw] : []
+    for (const def of chain) {
+      void onAction?.({ name: def.action, params: def.params } as Action)
+    }
+  }
 
   return (
     <button
       type="button"
-      onClick={onClick}
+      onClick={handleClick}
       disabled={isDisabled}
       className={cx(
         'inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium rounded-md border transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',

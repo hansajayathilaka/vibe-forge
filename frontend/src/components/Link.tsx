@@ -7,8 +7,8 @@ interface LinkProps {
   external?: boolean | null
 }
 
-export function Link(rawProps: ComponentRenderProps) {
-  const { label, to, external } = rawProps as unknown as LinkProps
+export function Link({ element }: ComponentRenderProps) {
+  const { label, to, external } = element.props as unknown as LinkProps
   const cls = 'text-blue-600 hover:text-blue-800 underline underline-offset-2 transition-colors'
 
   if (external) {

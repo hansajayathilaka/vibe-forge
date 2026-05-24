@@ -1,4 +1,5 @@
 import type { ComponentRenderProps } from '@json-render/react'
+import { useData } from '@json-render/react'
 
 type BadgeColor = 'green' | 'yellow' | 'red' | 'blue' | 'gray'
 
@@ -15,8 +16,15 @@ interface BadgeProps {
   color?: BadgeColor | null
 }
 
-export function Badge(rawProps: ComponentRenderProps) {
-  const { label, color = 'gray' } = rawProps as BadgeProps
+export function Badge({ element }: ComponentRenderProps) {
+  const { get } = useData()
+  const { label: rawLabel, color = 'gray' } = element.props as BadgeProps
+
+  let label: unknown = rawLabel
+  if (rawLabel !== null && typeof rawLabel === 'object' && '$state' in rawLabel) {
+    label = get((rawLabel as { '$state': string })['$state'])
+  }
+
   const c = (color ?? 'gray') as BadgeColor
   return (
     <span

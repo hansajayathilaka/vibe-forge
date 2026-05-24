@@ -1,20 +1,25 @@
 import type { ComponentRenderProps } from '@json-render/react'
+import type { Action } from '@json-render/core'
+import type { UiActionDef } from '@shared/types/index.js'
 
 interface FormProps {
-  onSubmit?: () => void
-  children?: React.ReactNode
+  _actions?: Record<string, UiActionDef | UiActionDef[]>
 }
 
-export function Form(rawProps: ComponentRenderProps) {
-  const { onSubmit, children } = rawProps as FormProps
+export function Form({ element, children, onAction }: ComponentRenderProps) {
+  const { _actions } = element.props as FormProps
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const raw = _actions?.submit
+    const chain: UiActionDef[] = Array.isArray(raw) ? raw : raw ? [raw] : []
+    for (const def of chain) {
+      void onAction?.({ name: def.action, params: def.params } as Action)
+    }
+  }
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault()
-        onSubmit?.()
-      }}
-      className="flex flex-col gap-4"
-    >
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       {children}
     </form>
   )
